@@ -1,10 +1,10 @@
 import os
 
 import asyncio
-import firebase_admin
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Callable
 from google.oauth2 import service_account
 from google.cloud import firestore
+from google.cloud.firestore_v1 import FieldFilter
 
 
 from .document_db_module import DocumentDBModule, Filter, OrderBy
@@ -20,11 +20,15 @@ class FirebaseFirestoreModule(DocumentDBModule):
     """
 
     def __init__(self, project_id: Optional[str] = None):
-        cred = service_account.Credentials.from_service_account_file(
-            os.getenv("FIREBASE_SERVICE_ACCOUNT_FILE", "service_account.json")
-        )
-        self.firebase_app = firebase_admin.initialize_app(cred)
-        self.firestore_db = firestore.client()
+        # Prefer explicit service account if provided; else fall back to ADC
+        cred = None
+        sa_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_FILE", "service_account.json")
+        try:
+            if sa_path and os.path.exists(sa_path):
+                cred = service_account.Credentials.from_service_account_file(sa_path)
+        except Exception as e:
+            print(f"Firestore: failed to load service account from {sa_path}: {e}. Falling back to ADC.")
+        self.firestore_db = firestore.Client(project=project_id, credentials=cred)
 
     # Firestore client is synchronous. Use asyncio.to_thread to avoid blocking.
     async def create_document(
@@ -76,22 +80,30 @@ class FirebaseFirestoreModule(DocumentDBModule):
         limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         def _inner():
-            query = self.firestore_db.collection(collection)
-            if filters:
-                for field, op, value in filters:
-                    query = query.where(field, op, value)
-            if order_by:
-                field, direction = order_by
-                query = query.order_by(field, direction=firestore.Query.DESCENDING if direction == "desc" else firestore.Query.ASCENDING)
-            if limit:
-                query = query.limit(limit)
-            docs = query.stream()
-            out: List[Dict[str, Any]] = []
-            for doc in docs:
-                d = doc.to_dict() or {}
-                d["id"] = doc.id
-                out.append(d)
-            return out
+            try:
+                print(f"Listing documents in collection: {collection}")
+                query = self.firestore_db.collection(collection)
+                if filters:
+                    for field, op, value in filters:
+                        # Use FieldFilter with 'filter=' kwarg to avoid warnings and ensure compatibility
+                        query = query.where(filter=FieldFilter(field, op, value))
+                if order_by:
+                    field, direction = order_by
+                    query = query.order_by(field, direction=firestore.Query.DESCENDING if direction == "desc" else firestore.Query.ASCENDING)
+                if limit:
+                    query = query.limit(limit)
+                print("Executing Firestore query stream...")
+                docs = query.stream()
+                out: List[Dict[str, Any]] = []
+                for doc in docs:
+                    d = doc.to_dict() or {}
+                    d["id"] = doc.id
+                    out.append(d)
+                print(f"Documents listed in collection '{collection}': {out}")
+                return out
+            except Exception as e:
+                print("Error listing documents:", e)
+                return []
 
         return await asyncio.to_thread(_inner)
 

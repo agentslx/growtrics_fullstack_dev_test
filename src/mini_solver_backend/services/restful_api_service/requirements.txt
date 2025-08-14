@@ -1,0 +1,11 @@
+flask[async]
+gunicorn
+kink
+pydantic
+python-dotenv
+bcrypt
+google-cloud-firestore
+google-auth
+google-auth-oauthlib
+PyJWT
+pydantic[email]

@@ -48,6 +48,8 @@ For this test project, I simplified the architecture as follows:
 
     > If using Firebase Firestore for database, another option is to subscribe to the Firestore changes, if new request is created then the processing service will be triggered automatically. This is a good option for small, lightweight or serverless applications, but for larger systems, I prefer using a message queue like RabbitMQ to decouple services and handle high loads. Firestore can also add cost if overused!
 
+    > Here I don't use Firebase Auth for user authentication and authorization, but it's also a viable option.
+
 #### Tech stack
 
 - **Backend**: Flask for API development, Firebase Firestore for database, RabbitMQ for message queue, Cloud Storage for image storage.

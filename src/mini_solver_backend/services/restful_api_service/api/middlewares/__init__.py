@@ -1,1 +1,1 @@
-from .auth_middleware import auth_required
+from .auth_middleware import require_auth

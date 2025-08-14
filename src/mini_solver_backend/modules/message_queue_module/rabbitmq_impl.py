@@ -112,7 +112,7 @@ class RabbitMQModule(MessageQueueModule):
                 if not auto_ack:
                     await msg.nack(requeue=False)
 
-        async with q.iterator() as queue_iter:
+        async with q.iterator(no_ack=auto_ack) as queue_iter:
             async for msg in queue_iter:
                 # spawn a task per message to allow concurrency up to prefetch_count
                 task = asyncio.create_task(_process(msg))

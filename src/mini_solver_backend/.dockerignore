@@ -120,3 +120,4 @@ dmypy.json
 run.sh
 auto_format_code.sh
 
+service_account.json

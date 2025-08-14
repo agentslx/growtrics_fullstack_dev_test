@@ -1,9 +1,11 @@
 from abc import abstractmethod
 
+from pydantic import BaseModel
+
 class LLMModule:
     
     @abstractmethod
-    async def process(self, prompt: str, image_path: str = None) -> str:
+    async def process(self, prompt: str, image_path: str = None, output_schema: BaseModel = None) -> str:
         """
         Generate a response based on the provided prompt and optional image.
         

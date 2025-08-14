@@ -1,5 +1,6 @@
 import json
 import os
+import asyncio
 
 from google import genai
 from pydantic import BaseModel
@@ -28,20 +29,26 @@ class GeminiLLMModule(LLMModule):
         :return: The generated response as a string.
         """
         try:
-            file = self.client.files.upload(file=image_path)
+            def _call():
+                file = self.client.files.upload(file=image_path) if image_path else None
+                contents = [prompt]
+                if file:
+                    contents.append(file)
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=contents,
+                    config={
+                        "response_mime_type": "application/json",
+                        "response_schema": output_schema,
+                    }
+                    if output_schema
+                    else None,
+                )
+                # Prefer parsed if available, else text
+                return response.parsed if getattr(response, "parsed", None) is not None else response.text
 
-            response = self.client.models.generate_content(
-                model=self.model, 
-                contents=[prompt, file],
-                config={
-                    "response_mime_type": "application/json",
-                    "response_schema": output_schema,
-                } if output_schema else None,
-            )
-            response_text = response.text
-            results = response.parsed
+            results = await asyncio.to_thread(_call)
             return results
-
         except Exception as e:
             return {"error": f"An error occurred with the Gemini API: {e}"}
 

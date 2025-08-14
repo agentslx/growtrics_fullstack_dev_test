@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException, status
 from kink import di
 
 from entities.user import User
@@ -9,7 +9,7 @@ from ...domain.usecases.login_user import LoginUser
 from ...domain.usecases.refresh_tokens import RefreshTokens
 from ..schemas.auth import RegisterRequest, LoginRequest, UserResponse, AuthResponse, RefreshRequest
 
-router = Blueprint("auth", __name__, url_prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 def _to_user_response(user: User) -> UserResponse:
@@ -23,49 +23,31 @@ def _to_user_response(user: User) -> UserResponse:
     )
 
 
-@router.post("/register")
-async def register():
+@router.post("/register", response_model=AuthResponse)
+async def register(req: RegisterRequest):
     usecase: RegisterUser = di[RegisterUser]
     try:
-        data = request.get_json(force=True, silent=False) or {}
-        req = RegisterRequest(**data)
         user, access, refresh = await usecase(req.name, str(req.email), req.password)
     except ValueError as e:
-        return jsonify({"detail": str(e)}), 400
-    except Exception:
-        return jsonify({"detail": "Bad request"}), 400
-
-    resp = AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)
-    return jsonify(resp.model_dump())
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    return AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)
 
 
-@router.post("/login")
-async def login():
+@router.post("/login", response_model=AuthResponse)
+async def login(req: LoginRequest):
     usecase: LoginUser = di[LoginUser]
     try:
-        data = request.get_json(force=True, silent=False) or {}
-        req = LoginRequest(**data)
         user, access, refresh = await usecase(str(req.email), req.password)
     except ValueError as e:
-        return jsonify({"detail": str(e)}), 401
-    except Exception:
-        return jsonify({"detail": "Bad request"}), 400
-
-    resp = AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)
-    return jsonify(resp.model_dump())
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
+    return AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)
 
 
-@router.post("/refresh")
-async def refresh():
+@router.post("/refresh", response_model=AuthResponse)
+async def refresh(req: RefreshRequest):
     usecase: RefreshTokens = di[RefreshTokens]
     try:
-        data = request.get_json(force=True, silent=False) or {}
-        req = RefreshRequest(**data)
         user, access, refresh = await usecase(req.refresh_token)
     except ValueError as e:
-        return jsonify({"detail": str(e)}), 401
-    except Exception:
-        return jsonify({"detail": "Bad request"}), 400
-
-    resp = AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)
-    return jsonify(resp.model_dump())
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
+    return AuthResponse(user=_to_user_response(user), access_token=access, refresh_token=refresh)

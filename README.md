@@ -52,7 +52,7 @@ For this test project, I simplified the architecture as follows:
 
 #### Tech stack
 
-- **Backend**: Flask for API development, Firebase Firestore for database, RabbitMQ for message queue, Cloud Storage for image storage.
+- **Backend**: FastAPI for API development, Firebase Firestore for database, RabbitMQ for message queue, Cloud Storage for image storage.
 - **Frontend**: Flutter for cross-platform mobile app development.
 - **Deployment**: Docker and Docker Compose.
 - **Image Processing**: Multi-modal Gemini API.

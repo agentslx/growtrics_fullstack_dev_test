@@ -18,7 +18,7 @@ class LoadingPage extends StatelessWidget {
       child: BlocConsumer<LoadingCubit, LoadingState>(
         listener: (context, state) {
           if (state.authenticationState == AuthenticationState.unauthenticated) {
-            context.go(AuthRouter.login);
+            context.go(AuthRouter.signUp);
           } else if (state.authenticationState == AuthenticationState.loggedInNeedVerify) {
             context.go(HomeRouter.home);
           } else if (state.authenticationState == AuthenticationState.loggedIn) {
@@ -27,7 +27,7 @@ class LoadingPage extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: ColorName.brandTeal,
+            backgroundColor: ColorName.white,
             body: Center(
               child: CircularLoadingIndicator(),
             ),

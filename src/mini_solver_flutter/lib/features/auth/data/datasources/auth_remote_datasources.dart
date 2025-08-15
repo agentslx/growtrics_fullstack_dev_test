@@ -29,7 +29,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<LoginResponseModel> login(String email, String password) async {
     final response = await restfulModule.post<Map<String, dynamic>>(
-      '/users/login',
+      '/auth/login',
       data: {
         'email': email,
         'password': password,
@@ -45,9 +45,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     required String password,
   }) async {
     final response = await restfulModule.post<Map<String, dynamic>>(
-      '/users/register',
+      '/auth/register',
       data: {
-        'full_name': fullName,
+        'name': fullName,
         'email': email,
         'password': password,
       },
@@ -58,7 +58,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<UserProfile> getAccountDetails() async {
     final response = await restfulModule.get<Map<String, dynamic>>(
-      '/users/profile',
+      '/users/me',
     );
     return UserProfile.fromJson(response.data as Map<String, dynamic>);
   }
@@ -72,7 +72,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     final response = await restfulModule.put<Map<String, dynamic>>(
       '/users/profile',
       data: <String, dynamic>{
-        'full_name': fullName,
+        'name': fullName,
         'gender': gender,
         'avatar': avatar,
       },
@@ -83,9 +83,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<LoginResponseModel> refreshToken(String refreshToken) async {
     final response = await restfulModule.post<Map<String, dynamic>>(
-      '/users/refresh-token',
+      '/auth/refresh',
       data: <String, dynamic>{
-        'token': refreshToken,
+        'refresh_token': refreshToken,
       },
     );
     return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);

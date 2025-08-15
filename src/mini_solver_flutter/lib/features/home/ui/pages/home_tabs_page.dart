@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../solving/ui/pages/solving_main_page.dart';
 import '../../blocs/tabs_cubit/tabs_cubit.dart';
 
 class HomeTabsPage extends StatelessWidget {
@@ -18,11 +19,11 @@ class HomeTabsPage extends StatelessWidget {
               body: PageView(
                 controller: cubit.pageController,
                 physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  // Solve tab placeholder
-                  Container(),
+                children: const [
+                  // Solve tab shows the session list page
+                  SolvingMainPage(),
                   // Profile tab placeholder
-                  Container(),
+                  SizedBox.shrink(),
                 ],
               ),
               bottomNavigationBar: BottomNavigationBar(

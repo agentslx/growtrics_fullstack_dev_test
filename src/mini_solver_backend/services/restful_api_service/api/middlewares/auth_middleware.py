@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 import os
 from datetime import datetime, timezone
@@ -20,6 +20,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
     Use the `require_user_id` dependency below on routes that must be authenticated.
     """
 
+    def __init__(self, app, dispatch = None):
+        super().__init__(app, dispatch)
+
+        self.jwt_secret = os.getenv("JWT_SECRET", "dev-secret-change-me")
+        self.jwt_algorithm = os.getenv("JWT_ALGORITHM", "HS256")
+
+
     async def dispatch(self, request: Request, call_next):
         auth = request.headers.get("Authorization", "")
         request.state.user_id = None
@@ -30,8 +37,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
             try:
                 payload = jwt.decode(
                     token,
-                    os.getenv("JWT_SECRET", "dev-secret-change-me"),
-                    algorithms=[os.getenv("JWT_ALGORITHM", "HS256")],
+                    self.jwt_secret,
+                    algorithms=[self.jwt_algorithm],
                     options={"require": ["sub", "exp"], "verify_aud": False},
                 )
                 if payload.get("type") != "access":

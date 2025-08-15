@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 import os
 import asyncio
 import bcrypt
@@ -13,6 +13,11 @@ from ...domain.repositories.user_repository import UserRepository
 class UserRepositoryImpl(UserRepository):
     def __init__(self, ds: UserDocumentDBDataSource):
         self.ds = ds
+
+        self.jwt_secret = os.getenv("JWT_SECRET", "dev-secret-change-me")
+        self.jwt_algorithm = os.getenv("JWT_ALGORITHM", "HS256")
+        self.access_token_ttl_min = int(os.getenv("ACCESS_TOKEN_TTL_MIN", "60"))
+        self.refresh_token_ttl_days = int(os.getenv("REFRESH_TOKEN_TTL_DAYS", "7"))
 
     async def _hash_password(self, password: str) -> str:
         def _inner():
@@ -43,7 +48,7 @@ class UserRepositoryImpl(UserRepository):
         user_id = await self.ds.create(user_dict)
         return User(id=user_id, **{**user_dict, "created_at": now, "updated_at": now})
 
-    async def get_user(self, user_id: str) -> User | None:
+    async def get_user(self, user_id: str) -> User:
         doc = await self.ds.get_by_id(user_id)
         if not doc:
             return None
@@ -57,7 +62,7 @@ class UserRepositoryImpl(UserRepository):
             is_verified=bool(doc.get("is_verified", False)),
         )
 
-    async def get_user_by_email(self, email: str) -> User | None:
+    async def get_user_by_email(self, email: str) -> User:
         doc = await self.ds.get_by_email(email.lower().strip())
         if not doc:
             return None
@@ -72,10 +77,7 @@ class UserRepositoryImpl(UserRepository):
         )
 
     async def issue_tokens(self, user: User) -> tuple[str, str]:
-        secret = os.getenv("JWT_SECRET", "dev-secret-change-me")
-        alg = os.getenv("JWT_ALGORITHM", "HS256")
-        access_ttl_min = int(os.getenv("ACCESS_TOKEN_TTL_MIN", "60"))
-        refresh_ttl_days = int(os.getenv("REFRESH_TOKEN_TTL_DAYS", "7"))
+        
 
         now = datetime.now(timezone.utc)
         access_payload = {
@@ -83,26 +85,24 @@ class UserRepositoryImpl(UserRepository):
             "email": str(user.email),
             "type": "access",
             "iat": int(now.timestamp()),
-            "exp": int((now + timedelta(minutes=access_ttl_min)).timestamp()),
+            "exp": int((now + timedelta(minutes=self.access_token_ttl_min)).timestamp()),
         }
         refresh_payload = {
             "sub": user.id,
             "type": "refresh",
             "iat": int(now.timestamp()),
-            "exp": int((now + timedelta(days=refresh_ttl_days)).timestamp()),
+            "exp": int((now + timedelta(days=self.refresh_token_ttl_days)).timestamp()),
         }
-        access = jwt.encode(access_payload, secret, algorithm=alg)
-        refresh = jwt.encode(refresh_payload, secret, algorithm=alg)
+        access = jwt.encode(access_payload, self.jwt_secret, algorithm=self.jwt_algorithm)
+        refresh = jwt.encode(refresh_payload, self.jwt_secret, algorithm=self.jwt_algorithm)
         return access, refresh
 
-    async def verify_refresh_token(self, refresh_token: str) -> str | None:
-        secret = os.getenv("JWT_SECRET", "dev-secret-change-me")
-        alg = os.getenv("JWT_ALGORITHM", "HS256")
+    async def verify_refresh_token(self, refresh_token: str) -> str:
         try:
             payload = jwt.decode(
                 refresh_token,
-                secret,
-                algorithms=[alg],
+                self.jwt_secret,
+                algorithms=[self.jwt_algorithm],
                 options={"require": ["sub", "exp"], "verify_aud": False},
             )
             if payload.get("type") != "refresh":

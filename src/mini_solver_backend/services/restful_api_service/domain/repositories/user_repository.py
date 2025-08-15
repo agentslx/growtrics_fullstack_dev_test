@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -8,11 +8,11 @@ from entities.user import User
 
 class UserRepository(ABC):
     @abstractmethod
-    async def get_user(self, user_id: str) -> User | None:
+    async def get_user(self, user_id: str) -> User:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_user_by_email(self, email: str) -> User | None:
+    async def get_user_by_email(self, email: str) -> User:
         raise NotImplementedError
 
     @abstractmethod
@@ -30,6 +30,6 @@ class UserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def verify_refresh_token(self, refresh_token: str) -> str | None:
+    async def verify_refresh_token(self, refresh_token: str) -> str:
         """Verify refresh token and return user_id (sub) if valid, else None."""
         raise NotImplementedError

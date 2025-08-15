@@ -13,6 +13,8 @@ class ProcessingRepositoryImpl(ProcessingRepository):
         self.llm = llm
         self.mq = mq
 
+        self.reply_queue = os.getenv("REPLY_QUEUE", "solve_results")
+
     async def download_image(self, remote_path: str) -> str:
         # Download to a temp file, preserve extension if any
         _, ext = os.path.splitext(remote_path)
@@ -23,9 +25,7 @@ class ProcessingRepositoryImpl(ProcessingRepository):
 
     async def solve_problem_with_llm(self, prompt: str, image_local_path: str) -> list[SolveResult]:
         result = await self.llm.process(prompt=prompt, image_path=image_local_path, output_schema=list[SolveResult])
-        # Gemini implementation may return parsed object; ensure string
         return result
 
-    async def send_result(self, queue: str, body: dict) -> None:
-        print(f"Sending result to queue {queue}")
-        await self.mq.publish(queue, body)
+    async def send_result(self, body: dict) -> None:
+        await self.mq.publish(self.reply_queue, body)

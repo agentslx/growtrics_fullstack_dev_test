@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 import os
 from typing import Optional, Any, Dict
@@ -36,9 +36,6 @@ async def solve(
             content_type=image.content_type,
             prompt=prompt,
             user_id=user_id,
-            request_queue=os.getenv("REQUEST_QUEUE", "solve_requests"),
-            reply_queue=os.getenv("REPLY_QUEUE", "solve_results"),
-            timeout_sec=int(os.getenv("SOLVE_TIMEOUT_SEC", "60")),
         )
         return result
     except TimeoutError as e:

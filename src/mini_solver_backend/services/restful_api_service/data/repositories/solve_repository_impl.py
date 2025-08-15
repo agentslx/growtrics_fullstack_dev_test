@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 import os
 import uuid
@@ -15,6 +15,11 @@ class SolveRepositoryImpl(SolveRepository):
         self.db = db
         self.storage = storage
         self.mq = mq
+
+        self.request_queue = os.getenv("REQUEST_QUEUE", "solve_requests")
+        self.reply_queue = os.getenv("REPLY_QUEUE", "solve_results")
+        self.timeout_sec = int(os.getenv("SOLVE_TIMEOUT_SEC", "60"))
+
 
     async def create_solve_request(self, request_id: str, user_id: Optional[str], prompt: Optional[str]) -> None:
         now = datetime.now(timezone.utc).isoformat()
@@ -49,18 +54,16 @@ class SolveRepositoryImpl(SolveRepository):
                 pass
         return remote_path
 
-    async def send_request(self, queue: str, payload: Dict[str, Any], reply_queue: Optional[str] = None) -> None:
+    async def send_request(self, payload: Dict[str, Any]) -> None:
         await self.mq.connect()
-        # Ensure reply queue exists before sending request to avoid race conditions
-        if reply_queue:
-            await self.mq.declare_queue(reply_queue)
-        await self.mq.declare_queue(queue)
-        await self.mq.publish(queue, payload)
+        await self.mq.declare_queue(self.reply_queue)
+        await self.mq.declare_queue(self.request_queue)
+        await self.mq.publish(self.request_queue, payload)
         await self.mq.close()
 
-    async def wait_for_result(self, reply_queue: str, request_id: str, timeout_sec: int = 60) -> Dict[str, Any]:
+    async def wait_for_result(self, request_id: str, timeout_sec: int = 60) -> Dict[str, Any]:
         await self.mq.connect()
-        await self.mq.declare_queue(reply_queue)
+        await self.mq.declare_queue(self.reply_queue)
 
         loop = asyncio.get_running_loop()
         fut: asyncio.Future = loop.create_future()
@@ -70,7 +73,6 @@ class SolveRepositoryImpl(SolveRepository):
                 import json
 
                 msg = json.loads(body.decode("utf-8"))
-                print("Received message:", msg)
                 if msg.get("request_id") == request_id:
                     if not fut.done():
                         fut.set_result(msg)
@@ -78,7 +80,7 @@ class SolveRepositoryImpl(SolveRepository):
                 if not fut.done():
                     fut.set_exception(e)
 
-        consume_task = asyncio.create_task(self.mq.consume(reply_queue, handler, prefetch_count=1, auto_ack=True))
+        consume_task = asyncio.create_task(self.mq.consume(self.reply_queue, handler, prefetch_count=1, auto_ack=True))
         try:
             result = await asyncio.wait_for(fut, timeout=timeout_sec)
             return result

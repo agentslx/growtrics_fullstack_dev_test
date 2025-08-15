@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'features/auth/router.dart';
 import 'features/home/router.dart';
+import 'features/solving/router.dart';
 
 
 class AppRouter {
@@ -21,6 +22,7 @@ class AppRouter {
     routes: [
       ...AuthRouter.routes,
       ...HomeRouter.routes,
+      ...SolvingRouter.routes,
     ],
     onException: (context, state, error) {
       log('An exception occurred: $error ${state.error}');

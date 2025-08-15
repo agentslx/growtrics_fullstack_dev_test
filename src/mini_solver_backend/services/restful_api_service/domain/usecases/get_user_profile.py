@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 from dataclasses import dataclass
 
 from entities.user import User

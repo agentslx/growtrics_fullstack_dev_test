@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
@@ -15,11 +15,11 @@ class SolveRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def send_request(self, queue: str, payload: Dict[str, Any], reply_queue: Optional[str] = None) -> None:
+    async def send_request(self, payload: Dict[str, Any]) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    async def wait_for_result(self, reply_queue: str, request_id: str, timeout_sec: int = 60) -> Dict[str, Any]:
+    async def wait_for_result(self, request_id: str, timeout_sec: int = 60) -> Dict[str, Any]:
         """Wait for a message on reply_queue that matches request_id and return its payload."""
         raise NotImplementedError
 

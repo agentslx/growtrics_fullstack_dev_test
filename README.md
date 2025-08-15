@@ -99,16 +99,16 @@ The UI/UX design is kept simple and user-friendly. The app contains the followin
 #### Tasks
 
 - [x] Create the architecture design document and break down the tasks. Init git repository and commit the initial code.
-- [ ] Implement key backend features:
+- [x] Implement key backend features:
     - [x] Set up Firebase project, RabbitMQ, and other infrastructure.
     - [x] Implement the Solver Processing Service for processing images and returning solutions.
-    - [ ] Implement the User APIs for authentication and user management.
-    - [ ] Implement the Solver Management APIs for handling solving requests.
+    - [x] Implement the User APIs for authentication and user management.
+    - [x] Implement the Solver Management APIs for handling solving requests.
 
-- [ ] Implement key frontend features:
-    - [ ] Set up the Flutter app and create the UI screens.
-    - [ ] Implement the login and registration screens.
-    - [ ] Implement the home screen with the solver and profile tabs.
-    - [ ] Implement the image capture and processing functionality.
+- [x] Implement key frontend features:
+    - [x] Set up the Flutter app and create the UI screens.
+    - [x] Implement the login and registration screens.
+    - [x] Implement the home screen with the solver and profile tabs.
+    - [x] Implement the image capture and processing functionality.
 - [ ] Implement the history management feature to view past solved questions.
 - [ ] Fix bugs and polish the app.

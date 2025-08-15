@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -8,11 +8,8 @@ from modules import FileStorageModule, LLMModule, MessageQueueModule
 
 
 class ProcessingRepository(ABC):
-    """Repository interface used by the use case. Implementations delegate to modules."""
-
     @abstractmethod
     async def download_image(self, remote_path: str) -> str:
-        """Download an image and return the local file path."""
         raise NotImplementedError
 
     @abstractmethod
@@ -20,5 +17,5 @@ class ProcessingRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def send_result(self, queue: str, body: dict) -> None:
+    async def send_result(self, body: dict) -> None:
         raise NotImplementedError

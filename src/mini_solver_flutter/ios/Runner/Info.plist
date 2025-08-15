@@ -45,5 +45,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to capture your math problems for solving.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We access your photo library so you can pick images to solve.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to save captured images if you choose to.</string>
 </dict>
 </plist>

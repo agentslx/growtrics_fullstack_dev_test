@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 from fastapi import APIRouter, Depends, HTTPException, status, Security
 from fastapi.security import HTTPBearer
 from kink import di

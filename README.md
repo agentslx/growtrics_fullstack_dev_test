@@ -13,8 +13,8 @@ Here I explain the Mini Solver project's key architecture and design decisions, 
 
 1. Change the `.env.example` file in the `src/deployment` directory to `.env` and fill in the required environment variables, such as Firebase credentials and Gemini API keys.
 2. Start the backend service by running `docker-compose up` in the `src/deployment` directory.
-3. Change the `baseUrl` in the `src/mini_solver_flutter/lib/configs.dart` file to match your local IP address in your LAN network. For example, if your local IP is `192.168.1.100`, you would set `baseUrl` to `http://192.168.1.100:5000`.
-4. Run the Flutter app on your device by running `flutter run` in the `src/mini_solver_flutter` directory.
+3. Change the `apiBaseUrl` in the `src/mini_solver_flutter/lib/configs/env.dart` file to match your local IP address in your LAN network. For example, if your local IP is `192.168.1.100`, you would set `apiBaseUrl` to `http://192.168.1.100:8000`.
+4. Run the Flutter app on your device by running `flutter run --flavor dev -t lib/main_dev.dart`
    
    - For iOS, you may need to change the development team in the Xcode project settings. Open the project in Xcode, navigate to the "Signing & Capabilities" tab, and select your development team. If the application ID already exists, you can change to any unique ID, such as `com.mini_solver.app.test`.
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brandTeal">#008080</color>
+    <color name="brandGreen">#008040</color>
+    <color name="brandBlue">#004080</color>
+    <color name="brandRed">#800000</color>
+
+    <color name="error">#B00020</color>
+    <color name="success">#2E7D32</color>
+    <color name="warning">#FF8F00</color>
+
+    <color name="background">#FAFAFA</color>
+
+    <color name="gray50">#FAFAFA</color>
+    <color name="gray100">#F5F5F5</color>
+    <color name="gray200">#EEEEEE</color>
+    <color name="gray300">#E0E0E0</color>
+    <color name="gray400">#BDBDBD</color>
+    <color name="gray500">#9E9E9E</color>
+    <color name="gray600">#757575</color>
+    <color name="gray700">#616161</color>
+    <color name="gray800">#424242</color>
+    <color name="gray900">#212121</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

@@ -1,0 +1,67 @@
+{
+  "app_title": "Mini Solver",
+  "common": {
+    "or": "or",
+    "sign_in": "Sign in",
+    "email_address": "Email address",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "confirm": "Confirm",
+    "save": "Save",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "full_name": "Full name",
+    "phone_number": "Phone number",
+    "select": "Select",
+    "unknown_error": "An unknown error occurred",
+    "add": "Add"
+  },
+  "validation": {
+    "password_min_chars": "Minimum 8 characters",
+    "at_least_1_number": "At least 1 number",
+    "at_least_1_symbol": "At least 1 symbol",
+    "must_not_be_empty": "Must not be empty",
+    "invalid": "Invalid",
+    "invalid_email": "Invalid email",
+    "please_use_a_different_email": "Please use a different email",
+    "please_choose_a_different_password": "Please choose a different password",
+    "too_long": "Too long",
+    "too_short": "Too short",
+    "invalid_code": "Invalid code",
+    "invalid_password": "Invalid password"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Please enter your email address and password.",
+    "forgot_password": "Forgot password?",
+    "forgot_password_subtitle": "Don't worry - it happens! Enter your Email address below and we'll help you create a new password.",
+    "sign_up_prompt": "New here?",
+    "create_an_account": "Create an account",
+    "login_with": "Log in with"
+  },
+  "register": {
+    "title": "Create an account",
+    "subtitle": "Please enter your name, email and password to create an account.",
+    "password_guide": "Must be at least 8 characters",
+    "create_account": "Create account",
+    "terms_and_conditions": "By creating an account, you agree to our **Terms of Use** and **Privacy policy.**",
+    "sign_up_with": "Sign up with",
+    "already_have_an_account": "Already have an account?"
+  },
+  "verify": {
+    "title": "Verification",
+    "subtitle": "Please enter the code sent to {}.",
+    "resend_code": "Send again",
+    "resend_code_countdown": "Send again in {}",
+    "send_code": "Send code",
+    "verify": "Verify",
+    "code_sent": "A verification code has been sent to {}.",
+    "verified": "Verified",
+    "verify_failed": "Verification failed"
+  },
+  "tabs": {
+    "solve": "Solve",
+    "profile": "Profile"
+  }
+}

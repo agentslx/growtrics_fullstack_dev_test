@@ -18,6 +18,8 @@ class SolvingCaptureCubit extends Cubit<SolvingCaptureState> {
     try {
       emit(state.copyWith(isInitializing: true));
       _cameras = await availableCameras();
+      print("_cameras ${_cameras}");
+
       if (_cameras.isEmpty) {
         emit(state.copyWith(
           isInitializing: false,

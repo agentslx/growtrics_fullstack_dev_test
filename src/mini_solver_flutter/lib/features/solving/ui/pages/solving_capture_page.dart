@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../cubits/solving_capture_cubit/solving_capture_cubit.dart';
 import '../../cubits/solving_capture_cubit/solving_capture_state.dart';
@@ -30,7 +32,7 @@ class _SolvingCapturePageState extends State<SolvingCapturePage> {
               if (state.isInitializing) {
                 content = const Center(child: CircularProgressIndicator());
               } else if (!state.isCameraReady || controller == null || !controller.value.isInitialized) {
-                content = const Center(child: Text('Camera not available'));
+                content = Center(child: Text('solving.camera_not_available'.tr()));
               } else {
                 content = CameraPreview(controller);
               }
@@ -42,41 +44,49 @@ class _SolvingCapturePageState extends State<SolvingCapturePage> {
 
               return Scaffold(
                 backgroundColor: Colors.black,
-                body: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    content,
-                    // Top controls
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: cubit.toggleFlash,
-                              icon: Icon(
-                                state.isFlashOn ? Icons.flash_on : Icons.flash_off,
-                                color: Colors.white,
+                body: SafeArea(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      content,
+                      // Top controls
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: context.pop,
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                ),
                               ),
-                              tooltip: 'Flash',
-                            ),
-                            IconButton(
-                              onPressed: state.canSwitchCamera ? cubit.switchCamera : null,
-                              icon: const Icon(Icons.cameraswitch, color: Colors.white),
-                              tooltip: 'Switch Camera',
-                            ),
-                          ],
+                              IconButton(
+                                onPressed: cubit.toggleFlash,
+                                icon: Icon(
+                                  state.isFlashOn ? Icons.flash_on : Icons.flash_off,
+                                  color: Colors.white,
+                                ),
+                                tooltip: 'solving.flash'.tr(),
+                              ),
+                              IconButton(
+                                onPressed: state.canSwitchCamera ? cubit.switchCamera : null,
+                                icon: const Icon(Icons.cameraswitch, color: Colors.white),
+                                tooltip: 'solving.switch_camera'.tr(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    // Bottom controls
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SafeArea(
+                      // Bottom controls
+                      Align(
+                        alignment: Alignment.bottomCenter,
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0, left: 24.0, right: 24.0),
+                          padding: const EdgeInsets.only(bottom: 32.0, left: 24.0, right: 24.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -101,6 +111,9 @@ class _SolvingCapturePageState extends State<SolvingCapturePage> {
                                     shape: BoxShape.circle,
                                     border: Border.all(color: Colors.white, width: 4),
                                   ),
+                                  child: const Center(
+                                    child: Icon(Icons.camera_alt, color: Colors.white, size: 32),
+                                  )
                                 ),
                               ),
                               // Placeholder to balance row
@@ -109,8 +122,8 @@ class _SolvingCapturePageState extends State<SolvingCapturePage> {
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

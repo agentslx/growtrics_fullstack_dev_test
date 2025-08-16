@@ -21,7 +21,7 @@ class ProcessRequest:
 2. "final_result": A string containing only the final answer.
 3. "error": If there is an error, return empty solution and final_result, and include the error message in the "error" key.
 
-In solution, LaTeX and normal text should be splitted by $ sign. If you show it with steps, put proper \\n in it to make it look clear.
+In solution, LaTeX and normal text should be splitted by $ sign. If you show it with steps, put proper \\n in it to make it look clear. But don't use LaTeX if not needed.
 
 The solution should be detailed and comprehensive so that the user can learn from the solution and calculate the final result themselves if they want to.
 DO NOT include the final answer in the solution explanation, calculated result should be in the "final_result" key only.

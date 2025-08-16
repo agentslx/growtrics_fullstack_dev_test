@@ -6,8 +6,8 @@ class CircularLoadingIndicator extends StatelessWidget {
   const CircularLoadingIndicator({
     super.key,
     this.color = ColorName.brandTeal,
-    this.valueColor = ColorName.gray600,
-    this.strokeWidth = 1.5,
+    this.valueColor = ColorName.brandTeal,
+    this.strokeWidth = 4,
     this.value,
   });
 

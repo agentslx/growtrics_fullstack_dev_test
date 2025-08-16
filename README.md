@@ -23,6 +23,28 @@ Here I assume that you have basic knowledge of Docker, Flutter, and can run them
 
 5. Once the app is running, you can take a picture of a question or problem, and the app will send it to the backend for processing. The backend will return results and app will show the solution, answer, and explanation.
 
+## How to use the app
+
+1. Register or login an account
+
+    > Example test account: henry.test8@yopmail.com / Abc@12345
+
+2. After login, the "Solve" screen is your home screen. Click the floating action button with a camera icon to capture the image of the question or problem you want to solve.
+3. Once you captured, or picked an image from library, the app will send it to the backend for processing.
+4. Once the results are ready, the app will display the solution and answer. The solution is visible by default for latest question, but the final answer is hidden - this allow you as a learner to try the solution yourself first instead of just see the result. Press "Show result" will reveal the final answer.
+
+    > If the image contains no solvable problem, the app will inform you. If any error occurs, you can retry.
+    
+    > All of your requests while using the app is listed in that screen, with the latest one on top.
+
+    > One image can have multiple problems in it. For each problem you can collapse the solution explanation by tapping the header.
+
+    > You can delete the request by tap on the top-right "X" icon.
+
+Screenshots:
+
+[![Screenshot1](docs/screenshot1.png)](docs/screenshot1.png)
+
 ## Solution Overview
 
 #### Solution Architecture
@@ -84,6 +106,8 @@ Both the backend and frontend code are organized following the Clean Architectur
 
 For the backend, each services is contained in a folder under `services/` folder, with the same structure as above. Some folders are shared between services, such as `configs/`, `utils/`, and `modules/`. Entities are shared between services for consistency.
 
+For the frontend, because most of the time FE app won't process business logic as much like the backend, usecase layer usually become useless (just forwarding calls from UI layer to the repository). So I normally prefer omit the usecase layer, and let the BloCs/Cubits (or other controllers) act as the logic layer and use the repository directly.
+
 #### UI/UX Choices
 
 The UI/UX design is kept simple and user-friendly. The app contains the following screens:
@@ -110,5 +134,4 @@ The UI/UX design is kept simple and user-friendly. The app contains the followin
     - [x] Implement the login and registration screens.
     - [x] Implement the home screen with the solver and profile tabs.
     - [x] Implement the image capture and processing functionality.
-- [ ] Implement the history management feature to view past solved questions.
 - [ ] Fix bugs and polish the app.

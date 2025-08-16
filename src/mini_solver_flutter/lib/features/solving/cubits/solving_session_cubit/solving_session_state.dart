@@ -6,12 +6,14 @@ import '../../../../entities/solve_request/solve_result.dart';
 
 class SolvingItem extends Equatable {
   const SolvingItem({
+    required this.id,
     required this.image,
     this.isSubmitting = false,
     this.errorMessage,
     this.results = const <SolveResult>[],
   });
 
+  final String id;
   final File image;
   final bool isSubmitting;
   final String? errorMessage;
@@ -23,6 +25,7 @@ class SolvingItem extends Equatable {
     String? errorMessage,
     List<SolveResult>? results,
   }) => SolvingItem(
+        id: id,
         image: image ?? this.image,
         isSubmitting: isSubmitting ?? this.isSubmitting,
         errorMessage: errorMessage,
@@ -30,7 +33,7 @@ class SolvingItem extends Equatable {
       );
 
   @override
-  List<Object?> get props => [image.path, isSubmitting, errorMessage, results];
+  List<Object?> get props => [id, image.path, isSubmitting, errorMessage, results];
 }
 
 class SolvingSessionState extends Equatable {

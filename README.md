@@ -1,6 +1,6 @@
 # Mini Solver Project Overview
 
-Here I explain the Mini Solver project's key architecture and design decisions, code structure, UI/UX choices, and the technologies used.
+Here I explain the Mini Solver project's guide, key architecture and design decisions, code structure, UI/UX choices, and the technologies used.
 
 ## Get Started
 
@@ -16,12 +16,14 @@ Here I explain the Mini Solver project's key architecture and design decisions, 
 3. Change the `apiBaseUrl` in the `src/mini_solver_flutter/lib/configs/env.dart` file to match your local IP address in your LAN network. For example, if your local IP is `192.168.1.100`, you would set `apiBaseUrl` to `http://192.168.1.100:8000`.
 4. Run the Flutter app on your device by running `flutter run --flavor dev -t lib/main_dev.dart`
    
-   - For iOS, you may need to change the development team in the Xcode project settings. Open the project in Xcode, navigate to the "Signing & Capabilities" tab, and select your development team. If the application ID already exists, you can change to any unique ID, such as `com.mini_solver.app.test`.
+   - For iOS, you may need to change the development team in the Xcode project settings. Open the project in Xcode, navigate to the "Signing & Capabilities" tab, and select your development team. If the application ID already exists, you can change to any unique ID, such as `com.mini_solver.app.test` (add `test` postfix to make it different)
 
 
-Here I assume that you have basic knowledge of Docker, Flutter, and can run them on your local machine. If you encounter any issues, please refer to the official documentation for Docker and Flutter, or contact me directly for assistance.
+Here I assume that you have basic knowledge of Docker, Flutter, and can run them on your local machine. If you encounter any issues, please refer to the official documentation for Docker and Flutter, or contact me directly for assistance at my email nguyenviethai819996@gmail.com.
 
-5. Once the app is running, you can take a picture of a question or problem, and the app will send it to the backend for processing. The backend will return results and app will show the solution, answer, and explanation.
+## Secret keys:
+
+The `.env` file, which contains GEMINI API Key, and the Firebase `service_account.json` file are secret and cannot be sent to 
 
 ## How to use the app
 
@@ -41,9 +43,17 @@ Here I assume that you have basic knowledge of Docker, Flutter, and can run them
 
     > You can delete the request by tap on the top-right "X" icon.
 
+5. The "Profile" screen allows you to view your profile information and logout.
+
 Screenshots:
 
-[![Screenshot1](docs/screenshot1.png)](docs/screenshot1.png)
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; max-width: 750px;">
+    <img src="docs/screenshot1.png" alt="Screenshot1" width="200"/>
+    <img src="docs/screenshot2.png" alt="Screenshot2" width="200"/>
+    <img src="docs/screenshot3.png" alt="Screenshot3" width="200"/>
+    <img src="docs/screenshot4.png" alt="Screenshot4" width="200"/>
+    <img src="docs/screenshot5.png" alt="Screenshot5" width="200"/>
+</div>
 
 ## Solution Overview
 
@@ -134,4 +144,4 @@ The UI/UX design is kept simple and user-friendly. The app contains the followin
     - [x] Implement the login and registration screens.
     - [x] Implement the home screen with the solver and profile tabs.
     - [x] Implement the image capture and processing functionality.
-- [ ] Fix bugs and polish the app.
+- [x] Fix bugs and polish the app.

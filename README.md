@@ -11,8 +11,14 @@ Here I explain the Mini Solver project's guide, key architecture and design deci
 
 - Steps:
 
-1. Change the `.env.example` file in the `src/deployment` directory to `.env` and fill in the required environment variables, such as Firebase credentials and Gemini API keys.
-2. Start the backend service by running `docker-compose up` in the `src/deployment` directory.
+1. Change the `.env.example` file in the `src/mini_solver_backend` directory to `.env` and fill in the required environment variables, such as Firebase credentials and Gemini API keys. The secret files (`.env` and `service_account.json`) are shared with you via a secure channel.
+2. Start the backend service by running `docker-compose up` in the `src/mini_solver_backend/deployment` directory.
+
+```bash
+cd src/mini_solver_backend/deployment
+docker-compose up --build -d
+```
+
 3. Change the `apiBaseUrl` in the `src/mini_solver_flutter/lib/configs/env.dart` file to match your local IP address in your LAN network. For example, if your local IP is `192.168.1.100`, you would set `apiBaseUrl` to `http://192.168.1.100:8000`.
 4. Run the Flutter app on your device by running `flutter run --flavor dev -t lib/main_dev.dart`
    

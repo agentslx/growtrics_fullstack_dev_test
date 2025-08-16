@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Install Python deps first for better caching
-COPY src/mini_solver_backend/services/restful_api_service/requirements.txt ./requirements.txt
+COPY services/restful_api_service/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the whole project
@@ -23,6 +23,5 @@ COPY . .
 
 EXPOSE 5000
 
-# Start the Flask app via gunicorn
-# We set PYTHONPATH=/app/src so `mini_solver_backend` is importable
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "services.restful_api_service.main:app"]
+# Start the FastAPI with uvicorn
+CMD ["python", "-m", "services.restful_api_service.main"]

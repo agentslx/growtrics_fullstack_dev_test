@@ -2,14 +2,15 @@ import os
 from kink import di
 
 from modules import (
-    FirebaseStorageModule,
-    LocalFileStorageModule,
-    GeminiLLMModule,
-    RabbitMQModule,
-    FileStorageModule,
     LLMModule,
+    FileStorageModule,
     MessageQueueModule,
 )
+
+from modules.file_storage_module.local_file_storage_impl import LocalFileStorageModule
+from modules.message_queue_module.rabbitmq_impl import RabbitMQModule
+from modules.llm_module.gemini_llm_module_impl import GeminiLLMModule
+
 from .data.repositories.processing_repository_impl import ProcessingRepositoryImpl
 from .domain.repositories.processing_repository import ProcessingRepository
 from .domain.usecases.process_request import ProcessRequest

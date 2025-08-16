@@ -12,7 +12,46 @@ services:
       RABBITMQ_DEFAULT_USER: guest # Default username for RabbitMQ
       RABBITMQ_DEFAULT_PASS: guest # Default password for RabbitMQ
 
+  resful_service:
+    build:
+      context: ../
+      dockerfile: services/restful_api_service/Dockerfile
+    ports:
+      - "0.0.0.0:8000:8000"
+    env_file:
+      - ../.env
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - FIREBASE_SERVICE_ACCOUNT_FILE=/cred/service_account.json
+      - FIREBASE_PROJECT_ID=minisolver-bf339
+      - FIREBASE_STORAGE_BUCKET=minisolver-bf339.appspot.com
+      - LOCAL_STORAGE_DIR=/app/local_storage
+    volumes:
+      - ../service_account.json:/cred/service_account.json
+      - local_storage:/app/local_storage
+    depends_on:
+      - rabbitmq
+  
+  ai_engine:
+    build:
+      context: ../
+      dockerfile: services/ai_processing_engine/Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - FIREBASE_SERVICE_ACCOUNT_FILE=/cred/service_account.json
+      - FIREBASE_PROJECT_ID=minisolver-bf339
+      - FIREBASE_STORAGE_BUCKET=minisolver-bf339.appspot.com
+      - LOCAL_STORAGE_DIR=/app/local_storage
+    volumes:
+      - ../service_account.json:/cred/service_account.json
+      - local_storage:/app/local_storage
+    depends_on:
+      - rabbitmq
 
 volumes:
   rabbitmq_data:
     driver: local # Uses the local driver for persistent storage
+  local_storage:
+    driver: local

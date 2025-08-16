@@ -1,10 +1,8 @@
 
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from entities.solve_request import SolveResult
-from modules import FileStorageModule, LLMModule, MessageQueueModule
 
 
 class ProcessingRepository(ABC):

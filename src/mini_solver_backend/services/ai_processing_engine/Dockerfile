@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY src/mini_solver_backend/services/ai_processing_engine/requirements.txt ./requirements.txt
+COPY services/ai_processing_engine/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the whole repo (adjust to narrow context if needed)

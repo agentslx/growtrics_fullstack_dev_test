@@ -3,13 +3,15 @@ from kink import di
 
 from modules import (
     DocumentDBModule,
-    FirebaseFirestoreModule,
     FileStorageModule,
-    FirebaseStorageModule,
-    LocalFileStorageModule,
     MessageQueueModule,
-    RabbitMQModule,
 )
+
+from modules.document_db_module.firebase_firestore_impl import FirebaseFirestoreModule
+from modules.file_storage_module.firebase_storage_impl import FirebaseStorageModule
+from modules.file_storage_module.local_file_storage_impl import LocalFileStorageModule
+from modules.message_queue_module.rabbitmq_impl import RabbitMQModule
+
 from .data.datasources.user_document_db_datasource import UserDocumentDBDataSource
 from .data.repositories.user_repository_impl import UserRepositoryImpl
 from .domain.repositories.user_repository import UserRepository
